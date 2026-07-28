@@ -1,0 +1,23 @@
+name: On Push
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  # Example for consuming repositories:
+  #
+  # checks:
+  #   uses: meyerstk/iac-ci/.github/workflows/reusable-on-push.yml@main
+
+  demo:
+    name: Demo on-push workflow
+    runs-on: ubuntu-latest
+    steps:
+      - name: Succeed without running checks
+        run: echo "Reusable on-push workflow call is disabled in the demo repository."
