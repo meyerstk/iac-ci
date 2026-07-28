@@ -2,7 +2,7 @@
 name: Auto Merge
 
 on:
-  pull_request:
+  pull_request_target:
     types:
       - opened
       - reopened
@@ -15,3 +15,4 @@ permissions:
 jobs:
   automerge:
     uses: ./.github/workflows/reusable-automerge.yml
+    secrets: inherit

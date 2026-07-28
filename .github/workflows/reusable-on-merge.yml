@@ -3,9 +3,6 @@ name: Reusable On Merge
 
 on:
   workflow_call:
-    secrets:
-      APP_PRIVATE_KEY:
-        required: true
 
 jobs:
   publish:
@@ -81,7 +78,7 @@ jobs:
       - name: Checkout deployment repository
         uses: actions/checkout@v7
         with:
-          repository: meyersa/iac-cd
+          repository: meyerstk/iac-cd
           token: ${{ steps.app-token.outputs.token }}
           path: iac-cd
 
@@ -156,7 +153,7 @@ jobs:
 
           pr_number="$(
             gh pr list \
-              --repo meyersa/iac-cd \
+              --repo meyerstk/iac-cd \
               --head "$branch" \
               --base main \
               --state open \
@@ -166,14 +163,14 @@ jobs:
 
           if [[ -z "$pr_number" ]]; then
             gh pr create \
-              --repo meyersa/iac-cd \
+              --repo meyerstk/iac-cd \
               --base main \
               --head "$branch" \
               --title "Deploy ${image_name} ${SHORT_SHA}" \
               --body "Updates ${IMAGE} from ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${SOURCE_SHA}."
           else
             gh pr edit "$pr_number" \
-              --repo meyersa/iac-cd \
+              --repo meyerstk/iac-cd \
               --title "Deploy ${image_name} ${SHORT_SHA}" \
               --body "Updates ${IMAGE} from ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${SOURCE_SHA}."
           fi
