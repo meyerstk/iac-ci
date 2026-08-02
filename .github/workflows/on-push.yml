@@ -13,7 +13,7 @@ jobs:
   # Example for consuming repositories:
   #
   # checks:
-  #   uses: meyerstk/iac-ci/.github/workflows/reusable-on-push.yml@main
+  #   uses: meyersa/iac-ci/.github/workflows/reusable-on-push.yml@main
 
   demo:
     name: Demo on-push workflow
