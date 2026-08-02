@@ -16,7 +16,7 @@ jobs:
   #   uses: meyersa/iac-ci/.github/workflows/reusable-on-push.yml@main
 
   demo:
-    name: Required
+    name: checks / Required
     runs-on: ubuntu-latest
     steps:
       - name: Succeed without running checks
