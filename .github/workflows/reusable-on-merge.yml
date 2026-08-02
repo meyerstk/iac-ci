@@ -78,7 +78,7 @@ jobs:
       - name: Checkout deployment repository
         uses: actions/checkout@v7
         with:
-          repository: meyerstk/iac-cd
+          repository: meyersa/iac-cd
           token: ${{ steps.app-token.outputs.token }}
           path: iac-cd
 
@@ -153,7 +153,7 @@ jobs:
 
           pr_number="$(
             gh pr list \
-              --repo meyerstk/iac-cd \
+              --repo meyersa/iac-cd \
               --head "$branch" \
               --base main \
               --state open \
@@ -163,14 +163,14 @@ jobs:
 
           if [[ -z "$pr_number" ]]; then
             gh pr create \
-              --repo meyerstk/iac-cd \
+              --repo meyersa/iac-cd \
               --base main \
               --head "$branch" \
               --title "Deploy ${image_name} ${SHORT_SHA}" \
               --body "Updates ${IMAGE} from ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${SOURCE_SHA}."
           else
             gh pr edit "$pr_number" \
-              --repo meyerstk/iac-cd \
+              --repo meyersa/iac-cd \
               --title "Deploy ${image_name} ${SHORT_SHA}" \
               --body "Updates ${IMAGE} from ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${SOURCE_SHA}."
           fi
