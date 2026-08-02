@@ -96,3 +96,36 @@ jobs:
           severity: CRITICAL,HIGH
           exit-code: "1"
           ignore-unfixed: true
+
+  required-check:
+    name: Required
+    needs:
+      - codeql
+      - filesystem-scan
+      - test
+      - image-scan
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Verify all checks passed
+        env:
+          CODEQL_RESULT: ${{ needs.codeql.result }}
+          FILESYSTEM_SCAN_RESULT: ${{ needs.filesystem-scan.result }}
+          TEST_RESULT: ${{ needs.test.result }}
+          IMAGE_SCAN_RESULT: ${{ needs.image-scan.result }}
+        shell: bash
+        run: |
+          for result in \
+            "$CODEQL_RESULT" \
+            "$FILESYSTEM_SCAN_RESULT" \
+            "$TEST_RESULT" \
+            "$IMAGE_SCAN_RESULT"
+          do
+            if [[ "$result" != "success" ]]; then
+              echo "A required job finished with: $result"
+              exit 1
+            fi
+          done
+
+          echo "All required checks passed."
