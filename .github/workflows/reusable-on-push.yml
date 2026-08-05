@@ -131,14 +131,14 @@ jobs:
           file: Dockerfile
           target: ${{ matrix.target }}
           load: true
-          tags: app-ivt-py:ci-${{ matrix.target }}
+          tags: ${{ github.repository }}:ci-${{ matrix.target }}
           cache-from: type=gha,scope=${{ matrix.target }}
           cache-to: type=gha,scope=${{ matrix.target }},mode=max,ignore-error=true
 
       - name: Scan ${{ matrix.target }} image
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: app-ivt-py:ci-${{ matrix.target }}
+          image-ref: ${{ github.repository }}:ci-${{ matrix.target }}
           severity: CRITICAL,HIGH
           exit-code: "1"
           ignore-unfixed: true
