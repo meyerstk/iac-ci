@@ -17,8 +17,16 @@ jobs:
         id: version
         shell: bash
         run: |
-          version="$(awk -F'"' '/^version = "/ { print $2; exit }' pyproject.toml)"
-          test -n "$version"
+          version=""
+
+          if [[ -f package.json ]]; then
+            version="$(jq -r '.version // empty' package.json)"
+          fi
+
+          if [[ -z "$version" && -f pyproject.toml ]]; then
+            version="$(awk -F'"' '/^version = "/ { print $2; exit }' pyproject.toml)"
+          fi
+
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Set runtime image metadata
@@ -30,7 +38,7 @@ jobs:
             type=ref,event=branch
             type=sha,prefix=sha-
             type=raw,value=${{ github.sha }}
-            type=raw,value=${{ steps.version.outputs.version }}
+            type=raw,value=${{ steps.version.outputs.version }},enable=${{ steps.version.outputs.version != '' }}
             type=raw,value=latest
 
       - name: Set up QEMU
