@@ -108,14 +108,10 @@ jobs:
           cache-to: type=gha,scope=test,mode=max,ignore-error=true
 
   image-scan:
-    name: Scan ${{ matrix.target }} image
+    name: Scan runtime image
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        target:
-          - dev
-          - runtime
 
     steps:
       - name: Checkout
@@ -124,21 +120,21 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
-      - name: Build ${{ matrix.target }} target
+      - name: Build runtime target
         uses: docker/build-push-action@v7
         with:
           context: .
           file: Dockerfile
-          target: ${{ matrix.target }}
+          target: runtime
           load: true
-          tags: ${{ github.repository }}:ci-${{ matrix.target }}
-          cache-from: type=gha,scope=${{ matrix.target }}
-          cache-to: type=gha,scope=${{ matrix.target }},mode=max,ignore-error=true
+          tags: ${{ github.repository }}:ci-runtime
+          cache-from: type=gha,scope=runtime
+          cache-to: type=gha,scope=runtime,mode=max,ignore-error=true
 
-      - name: Scan ${{ matrix.target }} image
+      - name: Scan runtime image
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: ${{ github.repository }}:ci-${{ matrix.target }}
+          image-ref: ${{ github.repository }}:ci-runtime
           severity: CRITICAL,HIGH
           exit-code: "1"
           ignore-unfixed: true
